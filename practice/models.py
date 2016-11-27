@@ -18,3 +18,5 @@ class StudentCources(models.Model):
     cource = models.ForeignKey(Cource, on_delete=models.CASCADE)
 
 
+
+

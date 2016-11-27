@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student list</title>
+</head>
+<body>
+
+    {% if students_list %}
+        <ul>
+            {% for student in students_list %}
+                <li><a href="{% url 'practice:detail' student.id %}">{{ student.name }} {{ student.family }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No students are available.</p>
+    {% endif %}
+
+</body>
+</html>
