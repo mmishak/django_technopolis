@@ -6,7 +6,28 @@
 </head>
 <body>
 
-    Страница о студенте: {{ student.name }} {{ student.family }}
+    <h1>{{ student.name }} {{ student.family }}</h1>
+
+    <h4>Записаться на курс:</h4>
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <form action="{% url 'practice:choose' student.id  %}" method="post">
+
+        {% csrf_token %}
+
+        {% for cource in cources_list %}
+
+            <input type="radio" name="cource" id="cource{{ forloop.counter }}" value="{{ cource.id }}" />
+
+            <label for="cource{{ forloop.counter }}">{{ cource.name }}</label><br />
+
+        {% endfor %}
+
+        <br>
+        <input type="submit" value="Select" />
+
+    </form>
 
 </body>
 </html>

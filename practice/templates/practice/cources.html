@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ student.name }} {{ student.family }}</title>
+</head>
+<body>
+
+    <h1>{{ student.name }} {{ student.family }}</h1>
+
+    <h4>Список курсов, на котрые записан студент:</h4>
+    {% if cource_list %}
+        <ul>
+            {% for cource in cource_list %}
+                <li>{{ cource.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No courses are available.</p>
+    {% endif %}
+
+</body>
+</html>
