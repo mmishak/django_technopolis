@@ -9,10 +9,10 @@
     <h1>{{ student.name }} {{ student.family }}</h1>
 
     <h4>Список курсов, на котрые записан студент:</h4>
-    {% if cource_list %}
+    {% if course_list %}
         <ul>
-            {% for cource in cource_list %}
-                <li>{{ cource.name }}</li>
+            {% for course in course_list %}
+                <li>{{ course.name }}</li>
             {% endfor %}
         </ul>
     {% else %}

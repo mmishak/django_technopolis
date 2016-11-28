@@ -6,8 +6,7 @@ from django.views import generic
 # Create your views here.
 from django.urls import reverse
 
-from practice.models import Student, Cource, StudentCources
-
+from practice.models import Student, Course, StudentCourses
 
 
 def index(request):
@@ -18,41 +17,41 @@ def index(request):
 
 def detail(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
-    cources_list = Cource.objects.order_by('name')
-    return render(request, 'practice/detail.html', {'student': student, 'cources_list': cources_list})
+    courses_list = Course.objects.order_by('name')
+    return render(request, 'practice/detail.html', {'student': student, 'courses_list': courses_list})
 
 
 def choose(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
     try:
-        selected_cource = Cource.objects.get(pk=request.POST['cource'])
-    except (KeyError, Cource.DoesNotExist):
+        selected_course = Course.objects.get(pk=request.POST['course'])
+    except (KeyError, Course.DoesNotExist):
         return render(request, 'practice/detail.html', {
             'student': student,
             'error_message': "Вы не выбрали курс",
         })
     else:
-        if StudentCources.objects.filter(student=student, cource=selected_cource):
+        if StudentCourses.objects.filter(student=student, course=selected_course):
             return render(request, 'practice/detail.html', {
                 'student': student,
                 'error_message': "Студент уже записан на этот курс",
             })
 
-        student_cource = StudentCources(student=student, cource=selected_cource)
-        student_cource.save()
+        student_course = StudentCourses(student=student, course=selected_course)
+        student_course.save()
 
-        return HttpResponseRedirect(reverse('practice:cources', args=(student.id,)))
+        return HttpResponseRedirect(reverse('practice:courses', args=(student.id,)))
 
 
-def cources(request, student_id):
+def courses(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
-    student_cources_list = StudentCources.objects.all();
-    cource_list = []
-    for item in student_cources_list:
+    student_courses_list = StudentCourses.objects.all();
+    course_list = []
+    for item in student_courses_list:
         if item.student.id == student.id:
-            cource_list.append(Cource.objects.get(pk=item.cource.id))
+            course_list.append(Course.objects.get(pk=item.course.id))
 
-    return render(request, 'practice/cources.html', {
+    return render(request, 'practice/courses.html', {
         'student': student,
-        'cource_list': cource_list,
+        'course_list': course_list,
     })

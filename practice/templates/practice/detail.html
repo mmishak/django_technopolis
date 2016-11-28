@@ -16,11 +16,11 @@
 
         {% csrf_token %}
 
-        {% for cource in cources_list %}
+        {% for course in courses_list %}
 
-            <input type="radio" name="cource" id="cource{{ forloop.counter }}" value="{{ cource.id }}" />
+            <input type="radio" name="course" id="course{{ forloop.counter }}" value="{{ course.id }}" />
 
-            <label for="cource{{ forloop.counter }}">{{ cource.name }}</label><br />
+            <label for="course{{ forloop.counter }}">{{ course.name }}</label><br />
 
         {% endfor %}
 
