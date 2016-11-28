@@ -1,4 +1,3 @@
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
@@ -7,18 +6,6 @@ from django.views import generic
 from django.urls import reverse
 
 from practice.models import Student, Course, StudentCourses
-
-
-def index(request):
-    students_list = Student.objects.order_by('name')
-    context = {'students_list': students_list}
-    return render(request, "practice/index.html", context)
-
-
-def detail(request, student_id):
-    student = get_object_or_404(Student, pk=student_id)
-    courses_list = Course.objects.order_by('name')
-    return render(request, 'practice/detail.html', {'student': student, 'courses_list': courses_list})
 
 
 def choose(request, student_id):
@@ -43,15 +30,68 @@ def choose(request, student_id):
         return HttpResponseRedirect(reverse('practice:courses', args=(student.id,)))
 
 
-def courses(request, student_id):
-    student = get_object_or_404(Student, pk=student_id)
-    student_courses_list = StudentCourses.objects.all();
-    course_list = []
-    for item in student_courses_list:
-        if item.student.id == student.id:
-            course_list.append(Course.objects.get(pk=item.course.id))
+class IndexView(generic.ListView):
+    template_name = 'practice/index.html'
+    context_object_name = 'student_list'
 
-    return render(request, 'practice/courses.html', {
-        'student': student,
-        'course_list': course_list,
-    })
+    def get_queryset(self):
+        return Student.objects.order_by('name')
+
+
+class DetailView(generic.DetailView):
+    model = Student
+    template_name = 'practice/detail.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(DetailView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the courses
+        context['course_list'] = Course.objects.order_by('name')
+        return context
+
+
+class CoursesView(generic.DetailView):
+    model = Student
+    template_name = 'practice/courses.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CoursesView, self).get_context_data(**kwargs)
+
+        context['course_list'] = self.get_course_list()
+        return context
+
+    def get_course_list(self):
+        student_courses_list = StudentCourses.objects.all()
+
+        course_list = []
+        for item in student_courses_list:
+            if item.student.id == self.object.id:
+                course_list.append(Course.objects.get(pk=item.course.id))
+
+        return course_list
+
+    # def index(request):
+    #     students_list = Student.objects.order_by('name')
+    #     context = {'students_list': students_list}
+    #     return render(request, "practice/index.html", context)
+    #
+    #
+    # def detail(request, student_id):
+    #     student = get_object_or_404(Student, pk=student_id)
+    #     courses_list = Course.objects.order_by('name')
+    #     return render(request, 'practice/detail.html', {'student': student, 'courses_list': courses_list})
+
+
+
+# def courses(request, student_id):
+#     student = get_object_or_404(Student, pk=student_id)
+#     student_courses_list = StudentCourses.objects.all();
+#     course_list = []
+#     for item in student_courses_list:
+#         if item.student.id == student.id:
+#             course_list.append(Course.objects.get(pk=item.course.id))
+#
+#     return render(request, 'practice/courses.html', {
+#         'student': student,
+#         'course_list': course_list,
+#     })

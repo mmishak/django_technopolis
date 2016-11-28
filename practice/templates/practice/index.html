@@ -6,9 +6,9 @@
 </head>
 <body>
 
-    {% if students_list %}
+    {% if student_list %}
         <ul>
-            {% for student in students_list %}
+            {% for student in student_list %}
                 <li><a href="{% url 'practice:detail' student.id %}">{{ student.name }} {{ student.family }}</a></li>
             {% endfor %}
         </ul>
