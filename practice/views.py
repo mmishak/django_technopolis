@@ -9,6 +9,7 @@ from practice.models import Student, Course, StudentCourses
 
 
 def choose(request, student_id):
+    course_list = Course.objects.all()
     student = get_object_or_404(Student, pk=student_id)
     try:
         selected_course = Course.objects.get(pk=request.POST['course'])
@@ -16,12 +17,14 @@ def choose(request, student_id):
         return render(request, 'practice/detail.html', {
             'student': student,
             'error_message': "Вы не выбрали курс",
+            'course_list': course_list,
         })
     else:
         if StudentCourses.objects.filter(student=student, course=selected_course):
             return render(request, 'practice/detail.html', {
                 'student': student,
                 'error_message': "Студент уже записан на этот курс",
+                'course_list': course_list,
             })
 
         student_course = StudentCourses(student=student, course=selected_course)
@@ -69,29 +72,3 @@ class CoursesView(generic.DetailView):
                 course_list.append(Course.objects.get(pk=item.course.id))
 
         return course_list
-
-    # def index(request):
-    #     students_list = Student.objects.order_by('name')
-    #     context = {'students_list': students_list}
-    #     return render(request, "practice/index.html", context)
-    #
-    #
-    # def detail(request, student_id):
-    #     student = get_object_or_404(Student, pk=student_id)
-    #     courses_list = Course.objects.order_by('name')
-    #     return render(request, 'practice/detail.html', {'student': student, 'courses_list': courses_list})
-
-
-
-# def courses(request, student_id):
-#     student = get_object_or_404(Student, pk=student_id)
-#     student_courses_list = StudentCourses.objects.all();
-#     course_list = []
-#     for item in student_courses_list:
-#         if item.student.id == student.id:
-#             course_list.append(Course.objects.get(pk=item.course.id))
-#
-#     return render(request, 'practice/courses.html', {
-#         'student': student,
-#         'course_list': course_list,
-#     })
