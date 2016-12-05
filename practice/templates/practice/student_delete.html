@@ -38,13 +38,15 @@
             </div>
 
             <div class="inner cover">
-                <h1 class="cover-heading">{{ student.name }} {{ student.family }}</h1>
+                <h1 class="cover-heading">Подтверждение удаления</h1>
 
                 <br>
 
-                <input type="button" onclick="window.location='{% url 'practice:update' student.id %}'" class="btn" value="Именить">
-                <input type="button" onclick="window.location='{% url 'practice:delete' student.id %}'" class="btn btn-danger" value="Удалить">
-
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <p>Вы действительно хотите удалить студента: {{ student.name }} {{ student.family }}?</p>
+                    <input type="submit" class="btn" value="Подтвердить">
+                </form>
 
             </div>
 

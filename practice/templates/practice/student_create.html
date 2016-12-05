@@ -2,20 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Detail</title>
+    <title>Create</title>
 
     {% load staticfiles %}
 
     <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
     <link href="{% static "bootstrap/css/cover.css" %}" rel="stylesheet">
 
-    <style>
-
-        td:hover {
-            background: #3a3f44;
-            text-decoration-line: none;
-        }
-    </style>
 </head>
 <body>
 
@@ -38,12 +31,27 @@
             </div>
 
             <div class="inner cover">
-                <h1 class="cover-heading">{{ student.name }} {{ student.family }}</h1>
+                <h1 class="cover-heading">Добавить студента</h1>
 
                 <br>
 
-                <input type="button" onclick="window.location='{% url 'practice:update' student.id %}'" class="btn" value="Именить">
-                <input type="button" onclick="window.location='{% url 'practice:delete' student.id %}'" class="btn btn-danger" value="Удалить">
+                <form class="form-horizontal" action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_name" class="col-sm-4 control-label">Имя</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="id_name" name="name" placeholder="имя">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_family" class="col-sm-4 control-label">Фамилия</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="id_family" name="family" placeholder="фамилия">
+                        </div>
+                    </div>
+
+                    <input type="submit" class="btn btn-success" value="Добавить">
+                </form>
 
 
             </div>

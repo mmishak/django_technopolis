@@ -2,21 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>Create</title>
 
     {% load staticfiles %}
 
     <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
     <link href="{% static "bootstrap/css/cover.css" %}" rel="stylesheet">
 
-    <style>
-
-        td:hover {
-            background: #3a3f44;
-            text-decoration-line: none;
-        }
-
-    </style>
 </head>
 <body>
 
@@ -31,7 +23,6 @@
                     <h3 class="masthead-brand"><a href="{% url "practice:index" %}"><img src="{% static "assets/polis_logo.png" %}"></a></h3>
                     <nav>
                         <ul class="nav masthead-nav">
-                            <li><a href="{% url "practice:create" %}">Добавить</a></li>
                             <li><a href="{% url "practice:index" %}">Вурнуться к списку</a></li>
                         </ul>
                     </nav>
@@ -39,27 +30,29 @@
             </div>
 
             <div class="inner cover">
-                <h1 class="cover-heading">Список</h1>
+                <h1 class="cover-heading">Изменить данные студента</h1>
+
                 <br>
 
-                {% if student_list %}
-                    <table class="table btn-lg">
+                <form class="form-horizontal" action="" method="post">
+                    {% csrf_token %}
 
-                        <tbody class="text-muted">
+                    <div class="form-group">
+                        <label for="id_name" class="col-sm-4 control-label">Имя</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="id_name" name="name" placeholder="имя" value="{{ student.name }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_family" class="col-sm-4 control-label">Фамилия</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="id_family" name="family" placeholder="фамилия" value="{{ student.family }}">
+                        </div>
+                    </div>
 
-                        {% for student in student_list %}
-                            <tr>
-                                <td>
-                                    <div class="text-warning" onclick="window.location='{% url 'practice:detail' student.id %}'">{{ student.name }} {{ student.family }}</div>
-                                </td>
-                            </tr>
-                        {% endfor %}
+                    <input type="submit" class="btn btn-success" value="Сохранить">
+                </form>
 
-                        </tbody>
-                    </table>
-                {% else %}
-                    <tr>No students are available.</tr>
-                {% endif %}
 
             </div>
 

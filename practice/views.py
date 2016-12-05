@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import generic
 
 # Create your views here.
@@ -49,8 +50,27 @@ class DetailView(generic.DetailView):
         # Call the base implementation first to get a context
         context = super(DetailView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the courses
-        context['course_list'] = Course.objects.order_by('name')
         return context
+
+
+class StudentCreate(generic.CreateView):
+    template_name_suffix = '_create'
+    model = Student
+    fields = ['name', 'family']
+    success_url = reverse_lazy('practice:index')
+
+
+class StudentUpdate(generic.UpdateView):
+    template_name_suffix = '_update'
+    model = Student
+    fields = ['name', 'family']
+    success_url = reverse_lazy('practice:index')
+
+
+class StudentDelete(generic.DeleteView):
+    template_name_suffix = '_delete'
+    model = Student
+    success_url = reverse_lazy('practice:index')
 
 
 class CoursesView(generic.DetailView):
